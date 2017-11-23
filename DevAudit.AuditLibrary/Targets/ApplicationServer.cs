@@ -209,24 +209,7 @@ namespace DevAudit.AuditLibrary
 
         protected string[] FindServerFile(string path)
         {
-            if (this.AuditEnvironment.OS.Platform == PlatformID.Win32NT)
-            {
-                string process_output;
-                string args = string.Format("/ -wholename '{0}'", path);
-                bool r = this.AuditEnvironment.ExecuteCommand("find", args, out process_output, false);
-                if (r || (!string.IsNullOrEmpty(process_output)))
-                {
-                    string[] f = process_output.Split(this.AuditEnvironment.LineTerminator.ToCharArray()).Where(o => !o.Contains("Permission denied")).ToArray();
-                    this.AuditEnvironment.Debug("FindServerFile({0}) returned {1}.", path, f.Aggregate((f1, f2) => f1 + " " + f2));
-                    return f;
-                }
-                else
-                {
-                    this.AuditEnvironment.Debug("FindServerFile({0}) returned null.", path);
-                    return new string[] { };
-                }
-            }
-            else
+            if (this.AuditEnvironment.OS.Platform == PlatformID.Unix)
             {
                 AuditEnvironment.ProcessExecuteStatus process_status;
                 string process_output;
@@ -245,6 +228,7 @@ namespace DevAudit.AuditLibrary
                     return new string[] { };
                 }
             }
+            else throw new NotSupportedException();
         }
         #endregion
 

@@ -47,6 +47,31 @@ namespace DevAudit.AuditLibrary
         #endregion
 
         #region Overriden methods
+        protected override void DetectServerBinaryFile(Dictionary<PlatformID, string[]> autodetect_binary_file_path)
+        {
+            bool set_binary_from_process_cmdline = false;
+            List<ProcessInfo> processes = this.AuditEnvironment.GetAllRunningProcesses();
+            if (processes != null && processes.Any(p => p.CommandLine == "postgres"))
+            {
+                string f = WhichServerFile("postgres");
+                if (!string.IsNullOrEmpty(f))
+                {
+                    AuditFileInfo ab = this.AuditEnvironment.ConstructFile(f);
+                    if (ab.Exists)
+                    {
+                        this.ApplicationBinary = ab;
+                        this.AuditEnvironment.Success("Auto-detected PostgreSQL binary at {0}.", this.ApplicationBinary.FullName);
+                        set_binary_from_process_cmdline = true;
+                    }
+                }
+            }
+            if (!set_binary_from_process_cmdline)
+            {
+                base.DetectServerBinaryFile(autodetect_binary_file_path);
+            }
+
+        }
+
         protected override void DetectConfigurationFile(Dictionary<PlatformID, string[]> default_configuration_file_path)
         {
             bool set_config_from_process_cmdline = false;
@@ -68,6 +93,11 @@ namespace DevAudit.AuditLibrary
                             this.ApplicationFileSystemMap.Add("ConfigurationFile", cf);
                             set_config_from_process_cmdline = true;
                         }
+                        else
+                        {
+                            this.AuditEnvironment.Warning("The configuration file specified on the mysqld command line {0} does not exist.", cf.FullName);
+                        }
+
                     }
                  }
                 if (!set_config_from_process_cmdline)
@@ -352,13 +382,9 @@ namespace DevAudit.AuditLibrary
                     {
                         if (env.ContainsKey("PGDATA"))
                         {
-                            if (!set_data_from_process_cmdline)
-                            {
-                                this.ServerDataDirectory = this.AuditEnvironment.ConstructDirectory(env["PGDATA"]);
-                                this.AuditEnvironment.Success("Auto-detected {0} server data directory at {1}.", this.ApplicationLabel, this.ServerDataDirectory.FullName);
-                                set_data_from_env = true;
-                            }
-
+                            this.ServerDataDirectory = this.AuditEnvironment.ConstructDirectory(env["PGDATA"]);
+                            this.AuditEnvironment.Success("Auto-detected {0} server data directory at {1}.", this.ApplicationLabel, this.ServerDataDirectory.FullName);
+                            set_data_from_env = true;
                         }
                     }
                 }
