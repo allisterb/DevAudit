@@ -1113,7 +1113,6 @@ namespace DevAudit.CommandLine
                         PrintMessage(ConsoleColor.White, "--[{0}/{1}] ", ++c, matched_vulnerabilities_count);
                         PrintMessageLine(ConsoleColor.Red, "{0} ", v.Title.Trim());
                         PrintAuditResultMultiLineField(ConsoleColor.White, 2, "Description", v.Description.Trim().Replace("\n", "").Replace(". ", "." + Environment.NewLine));
-                        PrintMessage(ConsoleColor.White, "  --Affected versions: ");
                         PrintMessageLine(ConsoleColor.Red, "{0}", string.Join(", ", v.Versions.ToArray()));
                         if (v.CVE != null && v.CVE.Count() > 0)
                         {
@@ -1134,6 +1133,21 @@ namespace DevAudit.CommandLine
                         if (!string.IsNullOrEmpty(v.Id))
                         {
                             PrintMessageLine("  --Id: {0}", v.Id);
+                        }
+                        if (v.References != null && v.References.Count() > 0)
+                        {
+                            if (v.References.Count() == 1)
+                            {
+                                PrintMessageLine("  --Reference: {0}", v.References[0]);
+                            }
+                            else
+                            {
+                                PrintMessageLine("  --References:");
+                                for (int i = 0; i < v.References.Count(); i++)
+                                {
+                                    PrintMessageLine("    - {0}", v.References[i]);
+                                }
+                            }
                         }
                         if (!string.IsNullOrEmpty(v.DataSource.Name))
                         {
