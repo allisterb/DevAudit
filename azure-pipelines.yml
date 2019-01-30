@@ -40,4 +40,6 @@ jobs:
       feedsToUse: 'config'
       nugetConfigPath: 'NuGet.Config'
 
-  - script: 'build.sh'
+  - - task: ShellScript@2
+  inputs:
+    scriptPath: ./build.sh
