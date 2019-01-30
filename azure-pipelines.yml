@@ -39,6 +39,4 @@ jobs:
       restoreSolution: '$(linux-solution)'
       feedsToUse: 'config'
       nugetConfigPath: 'NuGet.Config'
-
-  - script: mono .nuget/nuget.exe restore DevAudit.Mono.sln
-  - script: xbuild ./DevAudit.Mono.sln /p:Configuration=RuntimeDebug
+  - script: xbuild $(linux-solution) /p:Configuration=RuntimeDebug
