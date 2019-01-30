@@ -40,4 +40,4 @@ jobs:
       feedsToUse: 'config'
       nugetConfigPath: 'NuGet.Config'
 
-  - script: '$(linux-solution)build.sh'
+  - script: 'build.sh'
