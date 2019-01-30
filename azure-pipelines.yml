@@ -40,6 +40,4 @@ jobs:
       feedsToUse: 'config'
       nugetConfigPath: 'NuGet.Config'
 
-  - task: ShellScript@2
-    inputs:
-      scriptPath: ./build.sh
+  - script: xbuild ./DevAudit.Mono.sln /p:Configuration=RuntimeDebug
