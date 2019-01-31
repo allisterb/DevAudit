@@ -39,4 +39,4 @@ jobs:
       restoreSolution: '$(linux-solution)'
       feedsToUse: 'config'
       nugetConfigPath: 'NuGet.Config'
-  - script: xbuild $(linux-solution) /p:Configuration=RuntimeDebug
+  - script: xbuild $(linux-solution) /p:Configuration=RuntimeDebug /p:Platform=$(buildPlatform)
