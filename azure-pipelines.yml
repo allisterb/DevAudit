@@ -39,7 +39,4 @@ jobs:
       restoreSolution: '$(linux-solution)'
       feedsToUse: 'config'
       nugetConfigPath: 'NuGet.Config'
-  - task: Bash@3
-    inputs:
-      targetType: 'filePath'
-      filePath: 'build.sh'
+  - script: xbuild DevAudit.Mono.sln /p:Configuration=RuntimeDebug
