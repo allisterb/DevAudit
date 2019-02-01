@@ -5,4 +5,4 @@ set -e
 rm -fr Analyzers/*
 rm -fr Rules/*
 rm -fr Examples/*
-nuget restore DevAudit.Mono.sln && xbuild DevAudit.Mono.sln /p:Configuration=RuntimeDebug $*
+TERM=xterm mono ./nuget/nuget restore DevAudit.Mono.sln && mono xbuild DevAudit.Mono.sln /p:Configuration=RuntimeDebug $*
