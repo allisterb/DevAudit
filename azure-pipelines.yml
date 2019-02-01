@@ -42,4 +42,4 @@ jobs:
   - task: Bash@3
     inputs:
       targetType: 'filePath'
-      filePath: '$(linux-solution)/build.sh'
+      filePath: 'build.sh'
